@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="subject-header">
+    <h1>Магазин</h1>
+    <p>Ваш баланс: <strong>{{ current_user.money }} ₽</strong></p>
+</div>
+
+<div class="shop-container">
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-image">
+                <div class="product-placeholder">🛒</div>
+            </div>
+            <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <p class="product-price">{{ product.price }} ₽</p>
+                <p class="product-desc">Отличный товар для вашей коллекции!</p>
+
+                <form method="POST" action="{{ url_for('main.buy_product', product_id=product.id) }}">
+                    <button type="submit" class="buy-btn"
+                            {% if current_user.money < product.price %}disabled{% endif %}>
+                        {% if current_user.money >= product.price %}
+                            Купить
+                        {% else %}
+                            Недостаточно денег
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

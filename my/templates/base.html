@@ -57,6 +57,16 @@
                 <li><a href="{{ url_for('main.biology') }}"><i class='bx bx-dna'></i> Биология</a></li>
                 <li><a href="{{ url_for('main.physics') }}"><i class='bx bx-atom'></i> Физика</a></li>
                 <li><a href="{{ url_for('main.chemistry') }}"><i class='bx bx-test-tube'></i> Химия</a></li>
+                {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('main.stats') }}"><i class='bx bx-stats'></i> Статистика</a></li>
+        <li><a href="{{ url_for('main.shop') }}"><i class='bx bx-store'></i> Магазин</a></li>
+        <li><a href="{{ url_for('main.logout') }}"><i class='bx bx-log-out'></i> Выход</a></li>
+    {% else %}
+        <li><a href="{{ url_for('main.login') }}"><i class='bx bx-log-in'></i> Вход</a></li>
+        <li><a href="{{ url_for('main.register') }}"><i class='bx bx-user-plus'></i> Регистрация</a></li>
+    {% endif %}
+</ul>
+
             </ul>
         </div>
     </nav>

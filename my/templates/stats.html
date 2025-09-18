@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="subject-header">
+    <h1>Статистика</h1>
+    <p>Ваши достижения и прогресс</p>
+</div>
+
+<div class="stats-container">
+    <div class="stats-grid">
+        <div class="stat-card money-card">
+            <div class="stat-icon">💰</div>
+            <h3>Баланс</h3>
+            <div class="stat-value">{{ user.money }} ₽</div>
+        </div>
+
+        <div class="stat-card answers-card">
+            <div class="stat-icon">✅</div>
+            <h3>Правильные ответы</h3>
+            <div class="stat-value">{{ user.correct_answers }}</div>
+        </div>
+
+        <div class="stat-card total-card">
+            <div class="stat-icon">📊</div>
+            <h3>Всего ответов</h3>
+            <div class="stat-value">{{ user.total_answers }}</div>
+        </div>
+
+        <div class="stat-card accuracy-card">
+            <div class="stat-icon">🎯</div>
+            <h3>Точность</h3>
+            <div class="stat-value">{{ "%.1f"|format(user.get_accuracy()) }}%</div>
+        </div>
+    </div>
+
+    <div class="stats-chart">
+        <h3>Прогресс обучения</h3>
+        <div class="progress-chart">
+            <div class="chart-bar" style="width: {{ user.get_accuracy() }}%">
+                <span class="chart-label">{{ "%.1f"|format(user.get_accuracy()) }}%</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
