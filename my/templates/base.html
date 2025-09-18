@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Образовательный портал</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Верхняя панель профиля -->
+    <div class="profile-header">
+        <div class="profile-container">
+            <div class="profile-info">
+                <div class="avatar">
+                    <img src="{{ url_for('static', filename='img/avatar.jpg') }}" alt="Аватар" onerror="this.src='https://via.placeholder.com/80x80/667eea/ffffff?text=У'">
+                    <div class="online-status"></div>
+                </div>
+                <div class="profile-text">
+                    <h1>Образовательный портал</h1>
+                    <p>Ваш проводник в мир знаний</p>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-number">7</span>
+                    <span class="stat-label">предметов</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">120+</span>
+                    <span class="stat-label">уроков</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">знаний</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основная навигация -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="{{ url_for('main.index') }}">
+                    <i class='bx bx-book-open'></i>
+                    EduPortal
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('main.index') }}"><i class='bx bx-home'></i> Главная</a></li>
+                <li><a href="{{ url_for('main.math') }}"><i class='bx bx-calculator'></i> Математика</a></li>
+                <li><a href="{{ url_for('main.russian') }}"><i class='bx bx-text'></i> Русский язык</a></li>
+                <li><a href="{{ url_for('main.history') }}"><i class='bx bx-history'></i> История</a></li>
+                <li><a href="{{ url_for('main.geography') }}"><i class='bx bx-globe'></i> География</a></li>
+                <li><a href="{{ url_for('main.biology') }}"><i class='bx bx-dna'></i> Биология</a></li>
+                <li><a href="{{ url_for('main.physics') }}"><i class='bx bx-atom'></i> Физика</a></li>
+                <li><a href="{{ url_for('main.chemistry') }}"><i class='bx bx-test-tube'></i> Химия</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2024 Образовательный портал. Все права защищены.</p>
+            <div class="social-links">
+                <a href="#"><i class='bx bxl-vk'></i></a>
+                <a href="#"><i class='bx bxl-telegram'></i></a>
+                <a href="#"><i class='bx bxl-youtube'></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
