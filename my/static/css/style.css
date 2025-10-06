@@ -784,3 +784,30 @@ footer {
     color: #e74c3c;
     border-color: #e74c3c;
 }
+/* Стили для результатов теста */
+.correct-answers, .total-questions {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0.5rem 0;
+}
+
+.money-earned {
+    font-size: 1.3rem;
+    color: #f1c40f;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.final-score {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.score-percentage {
+    font-size: 2.5rem;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}

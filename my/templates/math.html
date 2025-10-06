@@ -8,7 +8,7 @@
 
 <div class="subject-content">
     <h2>Тест по математике</h2>
-    <p>Ответьте на 5 вопросов и проверьте свои знания.</p>
+    <p>Ответьте на 500 вопросов и проверьте свои знания.</p>
 
     <div class="quiz-container">
         <div class="quiz-progress">
@@ -159,3 +159,23 @@ restartBtn.addEventListener('click', () => {
 loadQuestion();
 </script>
 {% endblock %}
+
+// В функции showResults обновите отображение
+function showResults() {
+    questionText.style.display = 'none';
+    optionsContainer.style.display = 'none';
+    feedbackContainer.style.display = 'none';
+
+    // Обновляем прогресс до 100%
+    progressFill.style.width = '100%';
+    progressText.textContent = 'Тест завершен!';
+
+    scoreDisplay.innerHTML = `
+        <div class="final-score">Ваш результат: ${score} из ${questions.length}</div>
+        <div class="score-percentage">${Math.round((score / questions.length) * 100)}%</div>
+        <div class="money-earned">💰 Заработано: ${score} рублей</div>
+        <div class="correct-answers">✅ Правильных ответов: ${score}</div>
+        <div class="total-questions">📊 Всего вопросов: ${questions.length}</div>
+    `;
+    resultsContainer.style.display = 'block';
+}

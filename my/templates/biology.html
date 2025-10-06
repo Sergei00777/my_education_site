@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="subject-header">
+    <h1>Биология</h1>
+    <p>Проверьте свои знания в биологии!</p>
+</div>
+
+<div class="subject-content">
+    <h2>Тест по биологии</h2>
+    <p>Ответьте на вопросы и проверьте свои знания.</p>
+
+    <div class="quiz-container">
+        <div class="quiz-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">Вопрос 1 из 5</span>
+        </div>
+
+        <div class="quiz-question">
+            <h3 id="question-text"></h3>
+            <div class="quiz-options" id="options-container"></div>
+        </div>
+
+        <div class="quiz-feedback" id="feedback-container" style="display: none;">
+            <div class="feedback-message" id="feedback-message"></div>
+            <button class="next-btn" id="next-btn">Следующий вопрос →</button>
+        </div>
+
+        <div class="quiz-results" id="results-container" style="display: none;">
+            <h3>Результаты теста</h3>
+            <div class="score" id="score-display"></div>
+            <button class="restart-btn" id="restart-btn">Пройти тест again</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = {{ questions|tojson }};
+const subject = 'biology';
+let currentQuestion = 0;
+let score = 0;
+
+// Элементы DOM
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+const feedbackContainer = document.getElementById('feedback-container');
+const feedbackMessage = document.getElementById('feedback-message');
+const nextBtn = document.getElementById('next-btn');
+const resultsContainer = document.getElementById('results-container');
+const scoreDisplay = document.getElementById('score-display');
+const restartBtn = document.getElementById('restart-btn');
+const progressFill = document.querySelector('.progress-fill');
+const progressText = document.querySelector('.progress-text');
+
+// Загрузка вопроса
+function loadQuestion() {
+    const question = questions[currentQuestion];
+    questionText.textContent = question.question;
+    optionsContainer.innerHTML = '';
+
+    // Обновляем прогресс
+    const progress = ((currentQuestion) / questions.length) * 100;
+    progressFill.style.width = progress + '%';
+    progressText.textContent = `Вопрос ${currentQuestion + 1} из ${questions.length}`;
+
+    // Создаем варианты ответов
+    question.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'option-btn';
+        button.textContent = option;
+        button.onclick = () => checkAnswer(option);
+        optionsContainer.appendChild(button);
+    });
+
+    feedbackContainer.style.display = 'none';
+    resultsContainer.style.display = 'none';
+}
+
+// Проверка ответа
+function checkAnswer(selectedAnswer) {
+    const question = questions[currentQuestion];
+
+    // Отправляем запрос на сервер для проверки
+    fetch('/check_answer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            question_id: question.id,
+            answer: selectedAnswer,
+            subject: subject
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Блокируем все кнопки
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.disabled = true;
+            if (btn.textContent === data.correct_answer) {
+                btn.classList.add('correct');
+            } else if (btn.textContent === selectedAnswer && !data.correct) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        // Показываем feedback
+        if (data.correct) {
+            feedbackMessage.innerHTML = '<span class="correct-icon">✓</span> Ура! Правильный ответ!';
+            feedbackMessage.className = 'feedback-message correct';
+            score++;
+        } else {
+            feedbackMessage.innerHTML = `<span class="incorrect-icon">✗</span> Увы! Правильный ответ: <strong>${data.correct_answer}</strong>`;
+            feedbackMessage.className = 'feedback-message incorrect';
+        }
+
+        feedbackContainer.style.display = 'block';
+    });
+}
+
+// Следующий вопрос
+nextBtn.addEventListener('click', () => {
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        showResults();
+    }
+});
+
+// Показ результатов
+function showResults() {
+    questionText.style.display = 'none';
+    optionsContainer.style.display = 'none';
+    feedbackContainer.style.display = 'none';
+
+    // Обновляем прогресс до 100%
+    progressFill.style.width = '100%';
+    progressText.textContent = 'Тест завершен!';
+
+    scoreDisplay.innerHTML = `
+        <div class="final-score">Ваш результат: ${score} из ${questions.length}</div>
+        <div class="score-percentage">${Math.round((score / questions.length) * 100)}%</div>
+        <div class="money-earned">💰 Заработано: ${score} рублей</div>
+        <div class="correct-answers">✅ Правильных ответов: ${score}</div>
+        <div class="total-questions">📊 Всего вопросов: ${questions.length}</div>
+    `;
+    resultsContainer.style.display = 'block';
+}
+
+// Перезапуск теста
+restartBtn.addEventListener('click', () => {
+    currentQuestion = 0;
+    score = 0;
+    questionText.style.display = 'block';
+    optionsContainer.style.display = 'block';
+    loadQuestion();
+});
+
+// Загружаем первый вопрос
+loadQuestion();
+</script>
+{% endblock %}
